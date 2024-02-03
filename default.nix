@@ -44,9 +44,6 @@ let
     ["TOPCOM-0.17.8.tar.gz" "sha256-P4O5j1HuhZ7DIbrKv3sXLCWITxSEirbGKDJrmHvYqqs="]
   ];
 
-  link_tarfile =
-    file: "ln -s ${file.outPath} src/M2/BUILD/tarfiles/${file.name};";
-
 in
   pkgs.stdenv.mkDerivation rec {
     name = "M2";
@@ -56,6 +53,7 @@ in
     buildInputs = with pkgs; [
       autoconf
       automake
+      bison # not checked by M2 autoconf but required late in the build
       boost
       eigen
       gcc
@@ -73,8 +71,12 @@ in
     ];
 
     link_downloads =
-      map link_tarfile downloads;
+      map
+        (file: "ln -s ${file.outPath} src/M2/BUILD/tarfiles/${file.name};")
+        downloads;
 
+    # Autoconf does not seem to be able to identify the Boost version
+    # without these explicit arguments.
     configureArgs = [
       "--with-boost=${pkgs.boost.dev}"
       "--with-boost-libdir=${pkgs.boost}/lib"
