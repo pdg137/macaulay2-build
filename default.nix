@@ -54,21 +54,22 @@ in
     args = [ ./builder.sh ];
 
     buildInputs = with pkgs; [
-      gcc
       autoconf
       automake
+      boost
+      eigen
+      gcc
+      gfortran
+      libffi
       libtool
+      libxml2
+      libz
       lsb-release
+      lzma
+      ncurses
+      perl # not checked by M2 autoconf but required to build ntl
       pkg-config
       tbb
-      eigen
-      ncurses
-      boost
-      gfortran
-      libz
-      lzma
-      libxml2
-      libffi
     ];
 
     link_downloads =
