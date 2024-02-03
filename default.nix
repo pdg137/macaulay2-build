@@ -17,6 +17,11 @@ in
       eigen
       ncurses
       boost
+      gfortran
+      libz
+      lzma
+      libxml2
+      libffi
     ];
 
     configureArgs = [
