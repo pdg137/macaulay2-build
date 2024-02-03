@@ -22,11 +22,13 @@ in
       lzma
       libxml2
       libffi
+      wget # TODO replace with our own downloader
     ];
 
     configureArgs = [
       "--with-boost=${pkgs.boost.dev}"
       "--with-boost-libdir=${pkgs.boost}/lib"
+      "--enable-download" # TODO replace with our own downloader
     ];
 
     src = pkgs.fetchFromGitHub {
