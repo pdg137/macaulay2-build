@@ -19,6 +19,11 @@ in
       boost
     ];
 
+    configureArgs = [
+      "--with-boost=${pkgs.boost.dev}"
+      "--with-boost-libdir=${pkgs.boost}/lib"
+    ];
+
     src = pkgs.fetchFromGitHub {
       owner = "Macaulay2";
       repo = "M2";
