@@ -22,13 +22,25 @@ in
       lzma
       libxml2
       libffi
-      wget # TODO replace with our own downloader
     ];
+
+    link_downloads =
+      map
+        (file: "ln -s ${file.outPath} src/M2/BUILD/tarfiles/${file.name};")
+        [
+          (pkgs.fetchurl {
+            url = "https://www.hboehm.info/gc/gc_source/libatomic_ops-7.6.2.tar.gz";
+            hash = "sha256-IZck7a09WA1NN7IuHXy1LwAG0oLSapuGgbVgpiUULuY=";
+          })
+          (pkgs.fetchurl {
+            url = "https://www.hboehm.info/gc/gc_source/gc-8.0.4.tar.gz";
+            hash = "sha256-Q2oN3GexrAsEBbYalnW8qeB1yBVvTevR0G86VsfNKJ0=";
+          })
+        ];
 
     configureArgs = [
       "--with-boost=${pkgs.boost.dev}"
       "--with-boost-libdir=${pkgs.boost}/lib"
-      "--enable-download" # TODO replace with our own downloader
     ];
 
     src = pkgs.fetchFromGitHub {
