@@ -82,6 +82,11 @@ in
       "--with-boost-libdir=${pkgs.boost}/lib"
     ];
 
+    # This fixes two problems with building submodules, removing one
+    # gratuitous call to git and adding "sh" in one place where the
+    # makefile assumed a shell script would be executable.
+    patch = ./macaulay2.patch;
+
     src = pkgs.fetchFromGitHub {
       owner = "Macaulay2";
       repo = "M2";

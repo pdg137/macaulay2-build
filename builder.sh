@@ -11,6 +11,7 @@ cp --no-preserve=mode -r $src src
 eval $link_downloads
 
 cd src/M2
+patch < $patch
 
 make
 ./configure --prefix=$out $configureArgs
