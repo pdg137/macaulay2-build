@@ -15,6 +15,11 @@ let
     hash = builtins.elemAt args 1;
   };
 
+  offsite-download = args: pkgs.fetchurl {
+    url = builtins.elemAt args 0;
+    hash = builtins.elemAt args 1;
+  };
+
   downloads = map m2download [
     ["4ti2-1.6.9.tar.gz" "sha256-MFPnRntVha2FL2pW544oNSZTlD5ySa1eUXTUdE0XSWY="]
     ["cddlib-0.94m.tar.gz" "sha256-cN/9szabhwTcdUKKGzxCq5BHuBzgOfEvQn4usrGw3uI="]
@@ -42,6 +47,10 @@ let
     ["readline-8.2.tar.gz" "sha256-P+txcfFqhO6CyhijbXub4QmlLAT0kqBTMx19EJUAfDU="]
     ["readline82-001" "sha256-u/l/HsQKkp7ataqBmYweLvQ1Q2xZd1SRbmpYaPJzr/c="]
     ["TOPCOM-0.17.8.tar.gz" "sha256-P4O5j1HuhZ7DIbrKv3sXLCWITxSEirbGKDJrmHvYqqs="]
+  ] ++ map offsite-download [
+    # added in 1.23; seems to be missing from macaulay2.com
+    ["https://github.com/4ti2/4ti2/releases/download/Release_1_6_10/4ti2-1.6.10.tar.gz"
+     "sha256-98GRvrFCRrZD5P1bGLU9mWZpO55tOlaUQaDjyhSxqGs="]
   ];
 
 in
@@ -90,8 +99,9 @@ in
     src = pkgs.fetchFromGitHub {
       owner = "Macaulay2";
       repo = "M2";
-      rev = "b471161db89aa8665362c8b04067a38b39c00932";
-      hash = "sha256-jsueoBtM83wfp+YXSS9xY8MRhYxFp4+Ja6lcFcbR5SQ=";
+      # 1.23 release
+      rev = "ec65028f1527076b663279b1311188caa9e22b67";
+      hash = "sha256-uD1fpz9Awa+4W55C5BRPxIIxrLXffQx4b3JvpJ+QMc0=";
       fetchSubmodules = true;
     };
   }

@@ -1,5 +1,5 @@
---- GNUmakefile.in	2024-02-03 20:20:30.453900939 -0800
-+++ GNUmakefile.in	2024-02-04 01:29:58.938823923 -0800
+--- GNUmakefile.in	2024-02-04 10:50:57.418305659 -0800
++++ GNUmakefile.in	2024-02-06 21:33:00.232703649 -0800
 @@ -155,7 +155,7 @@
      $(eval $c-in-$1:; + if [ -f submodules/$1/Makefile ]; then $(MAKE) submodules/$1/Makefile && $(MAKE) -C submodules/$1 $c; fi)
      $(eval $c: $c-in-$1))
@@ -9,7 +9,18 @@
  git-update-in-$1:; cd @srcdir@/submodules/$1 && git checkout master && git pull
  git-status-in-$1:; cd @srcdir@/submodules/$1 && git status
  git-clean-in-$1:; cd @srcdir@/submodules/$1 && git clean -Xdf
-@@ -205,7 +205,7 @@
+@@ -190,10 +190,6 @@
+ 		LIBS="$$(LIBS)"								\
+ 		$$(SUBMODULE_CONFIGOPTIONS)
+ 
+-@srcdir@/submodules/$1/configure.ac: $(if $(or $(filter yes, @DOWNLOAD@), \
+-	$(filter $1, memtailor mathic mathicgb)), \
+-	git-checkout-in-$1, git-checkout-warning-for-$1)
+-
+ git-checkout-warning-for-$1:
+ 	@ echo "error: for the submodule \"$1\"" >&2
+ 	@ echo "       the source code is not present in the directory \"submodules/$1\"" >&2
+@@ -205,7 +201,7 @@
  	@ false
  
  @srcdir@/submodules/$1/configure @srcdir@/submodules/$1/Makefile.in: @srcdir@/submodules/$1/configure.ac @srcdir@/submodules/$1/Makefile.am
