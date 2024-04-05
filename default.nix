@@ -2,21 +2,17 @@ let
   pkgs = import <nixpkgs> {};
 
   # Include downloads of additional source from the Macaulay 2 website
-  # that are required for the build. We could have just used their
-  # "fat" download but this way is more flexible and will allow
-  # building alternative unreleased versions of M2.
+  # that are required for the build.
   #
   # Note that several of these packages are only available at
   # macaulay2.com, or the format of the downloads is slightly
   # different there from the official release.
+  #
+  # TODO: build and install these as separate packages, to make the
+  # build more modular.
 
   m2download = args: pkgs.fetchurl {
     url = "http://macaulay2.com/Downloads/OtherSourceCode/${builtins.elemAt args 0}";
-    hash = builtins.elemAt args 1;
-  };
-
-  offsite-download = args: pkgs.fetchurl {
-    url = builtins.elemAt args 0;
     hash = builtins.elemAt args 1;
   };
 
@@ -33,7 +29,6 @@ let
     ["lrslib-071a.tar.gz" "sha256-kmY26mjeRmJfFB9uAl3OlnzH5oz0v0pZc3XAY/XBFnM="]
     ["normaliz-3.9.2.tar.gz" "sha256-Q0JlKB1KwaTgxEBANlmk/5KDRQi7T5LA0mI4e0ShjuA="]
     ["TOPCOM-0.17.8.tar.gz" "sha256-P4O5j1HuhZ7DIbrKv3sXLCWITxSEirbGKDJrmHvYqqs="]
-  ] ++ map offsite-download [
   ];
 
 in
@@ -79,6 +74,11 @@ in
       mpsolve
       nauty
       ntl
+
+      # submodules normally built
+      givaro
+      fflas-ffpack
+      blas
     ];
 
     link_downloads =
@@ -94,9 +94,19 @@ in
       "--with-system-gc"
     ];
 
-    # This fixes two problems with building submodules, removing one
-    # gratuitous call to git and adding "sh" in one place where the
-    # makefile assumed a shell script would be executable.
+    # This fixes several issues with the make process that should
+    # probably be submitted as pull requests to M2.
+    #
+    # * two problems with building submodules: removing one gratuitous
+    #   call to git and adding "sh" in one place where the makefile
+    #  assumed a shell script would be executable.
+    #
+    # * removing use of the "time" program (not shell builtin) in a
+    #   single place, an unnecessary dependency that broke the build
+    #   on the very last step.
+    #
+    # * remove double-quotes in output from NixOS (and other versions)
+    #   of lsb_release, which break quoting in include files.
     patch = ./macaulay2.patch;
 
     src = pkgs.fetchFromGitHub {
