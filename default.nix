@@ -10,6 +10,9 @@ let
   #
   # TODO: build and install these as separate packages, to make the
   # build more modular.
+  #
+  # TODO: build documentation separately, since it takes a long time
+  # (maybe half of the total build time?) and isn't necessary.
 
   m2download = args: pkgs.fetchurl {
     url = "http://macaulay2.com/Downloads/OtherSourceCode/${builtins.elemAt args 0}";
@@ -55,6 +58,7 @@ in
       perl # not checked by M2 autoconf but required to build ntl
       pkg-config
       tbb
+      texinfoInteractive # surprise requirement at the very last step of the build!
 
       # packages normally downloaded during the build
       gmp
@@ -74,6 +78,9 @@ in
       mpsolve
       nauty
       ntl
+
+      # surprise requirement for _4ti2 (markov script will not run without it)
+      which
 
       # submodules normally built
       givaro
