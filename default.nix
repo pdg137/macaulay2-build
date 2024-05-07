@@ -80,6 +80,7 @@ in
       ntl
 
       # surprise requirement for _4ti2 (markov script will not run without it)
+      # see https://github.com/NixOS/nixpkgs/issues/309745
       which
 
       # submodules normally built
@@ -95,10 +96,12 @@ in
 
     # Autoconf does not seem to be able to identify the Boost version
     # without these explicit arguments.
+    # Also disable the documentation since this takes forever and currently fails.
     configureArgs = [
       "--with-boost=${pkgs.boost.dev}"
       "--with-boost-libdir=${pkgs.boost}/lib"
       "--with-system-gc"
+      "--disable-documentation"
     ];
 
     # This fixes several issues with the make process that should
