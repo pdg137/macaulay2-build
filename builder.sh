@@ -13,6 +13,8 @@ eval $link_downloads
 cd src/M2
 patch -p0 < $patch
 
+export CPPFLAGS=$cppflags
+
 make
 ./configure --prefix=$out $configureArgs
 make

@@ -21,7 +21,6 @@ let
 
   downloads = map m2download [
     # available in nix but not working
-    ["cddlib-0.94m.tar.gz" "sha256-cN/9szabhwTcdUKKGzxCq5BHuBzgOfEvQn4usrGw3uI="]
     ["gtest-1.10.0.tar.gz" "sha256-nckVepoVUex6fkPa6pppSgu1+4vsgSNdih5u9kxxbcs="]
 
     # unavailable?
@@ -94,15 +93,19 @@ in
         (file: "ln -s ${file.outPath} src/M2/BUILD/tarfiles/${file.name};")
         downloads;
 
-    # Autoconf does not seem to be able to identify the Boost version
-    # without these explicit arguments.
-    # Also disable the documentation since this takes forever and currently fails.
     configureArgs = [
+      # Autoconf does not seem to be able to identify the Boost version
+      # without these explicit arguments.
       "--with-boost=${pkgs.boost.dev}"
       "--with-boost-libdir=${pkgs.boost}/lib"
       "--with-system-gc"
+
+      # Disable the documentation since this takes forever and currently fails.
       "--disable-documentation"
     ];
+
+    # configure looks for cddlib in /usr/local, etc.
+    cppflags = "-I${pkgs.cddlib}/include/cddlib";
 
     # This fixes several issues with the make process that should
     # probably be submitted as pull requests to M2.
