@@ -20,9 +20,6 @@ let
   };
 
   downloads = map m2download [
-    # available in nix but not working
-    ["gtest-1.10.0.tar.gz" "sha256-nckVepoVUex6fkPa6pppSgu1+4vsgSNdih5u9kxxbcs="]
-
     # unavailable?
     ["cohomCalg-0.32.tar.gz" "sha256-NnxSuZwLCkeUshUYFDm/VKvkmYhy0+8l15O8E8TUDkI="]
     ["factory-4.2.1.tar.gz" "sha256-OjE12Nnom8pRKyLIhY8+A/RLFWKd9vAwnOT33e3QmhU="]
@@ -61,6 +58,9 @@ in
 
       # packages normally downloaded during the build
       gmp
+      gtest
+      gtest.dev
+      gtest.src
       readline
       lapack
       boehmgc
@@ -102,10 +102,15 @@ in
 
       # Disable the documentation since this takes forever and currently fails.
       "--disable-documentation"
+
+      # Point to gtest source (why does it need this?)
+      "--with-gtest-source-path=${pkgs.gtest.src}/googletest"
     ];
 
-    # configure looks for cddlib in /usr/local, etc.
-    cppflags = "-I${pkgs.cddlib}/include/cddlib";
+    # configure looks for
+    # - cddlib in /usr/local, etc.
+    # - <gtest/gtest.h>
+    cppflags = "-I${pkgs.cddlib}/include/cddlib -I${pkgs.gtest.dev}/include";
 
     # This fixes several issues with the make process that should
     # probably be submitted as pull requests to M2.
