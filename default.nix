@@ -4,6 +4,8 @@ let
   my-cohomCalg = import ./cohomCalg.nix { inherit pkgs; };
   my-frobby = import ./frobby.nix { inherit pkgs; };
   my-normaliz = import ./normaliz.nix { inherit pkgs; };
+  my-lrslib = import ./lrslib.nix { inherit pkgs; };
+  my-TOPCOM = import ./TOPCOM.nix { inherit pkgs; };
 
   # Include downloads of additional source from the Macaulay 2 website
   # that are required for the build.
@@ -27,8 +29,6 @@ let
     # unavailable?
     ["factory-4.2.1.tar.gz" "sha256-OjE12Nnom8pRKyLIhY8+A/RLFWKd9vAwnOT33e3QmhU="]
     ["factory.4.0.1-gftables.tar.gz" "sha256-nNFYzrHCscR73KLAsAS7qSyw4Kqg6mpDynhOvc4Q7r0="]
-    ["lrslib-071a.tar.gz" "sha256-kmY26mjeRmJfFB9uAl3OlnzH5oz0v0pZc3XAY/XBFnM="]
-    ["TOPCOM-0.17.8.tar.gz" "sha256-P4O5j1HuhZ7DIbrKv3sXLCWITxSEirbGKDJrmHvYqqs="]
   ];
 
 in
@@ -92,6 +92,8 @@ in
       my-cohomCalg
       my-normaliz
       my-frobby
+      my-lrslib
+      my-TOPCOM
     ];
 
     link_downloads =
