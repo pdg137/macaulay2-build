@@ -1,6 +1,10 @@
 let
   pkgs = import <nixpkgs> {};
 
+  my-cohomCalg = import ./cohomCalg.nix { inherit pkgs; };
+  my-frobby = import ./frobby.nix { inherit pkgs; };
+  my-normaliz = import ./normaliz.nix { inherit pkgs; };
+
   # Include downloads of additional source from the Macaulay 2 website
   # that are required for the build.
   #
@@ -21,12 +25,9 @@ let
 
   downloads = map m2download [
     # unavailable?
-    ["cohomCalg-0.32.tar.gz" "sha256-NnxSuZwLCkeUshUYFDm/VKvkmYhy0+8l15O8E8TUDkI="]
     ["factory-4.2.1.tar.gz" "sha256-OjE12Nnom8pRKyLIhY8+A/RLFWKd9vAwnOT33e3QmhU="]
     ["factory.4.0.1-gftables.tar.gz" "sha256-nNFYzrHCscR73KLAsAS7qSyw4Kqg6mpDynhOvc4Q7r0="]
-    ["frobby_v0.9.0.tar.gz" "sha256-rwkjg+bchJyG9OeXR64OXNMJppB0cjDhCqONYGQAYt8="]
     ["lrslib-071a.tar.gz" "sha256-kmY26mjeRmJfFB9uAl3OlnzH5oz0v0pZc3XAY/XBFnM="]
-    ["normaliz-3.9.2.tar.gz" "sha256-Q0JlKB1KwaTgxEBANlmk/5KDRQi7T5LA0mI4e0ShjuA="]
     ["TOPCOM-0.17.8.tar.gz" "sha256-P4O5j1HuhZ7DIbrKv3sXLCWITxSEirbGKDJrmHvYqqs="]
   ];
 
@@ -86,6 +87,11 @@ in
       givaro
       fflas-ffpack
       blas
+
+      # non-pkgs packages, defined above
+      my-cohomCalg
+      my-normaliz
+      my-frobby
     ];
 
     link_downloads =
