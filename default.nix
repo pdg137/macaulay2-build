@@ -6,30 +6,7 @@ let
   my-normaliz = import ./normaliz.nix { inherit pkgs; };
   my-lrslib = import ./lrslib.nix { inherit pkgs; };
   my-TOPCOM = import ./TOPCOM.nix { inherit pkgs; };
-
-  # Include downloads of additional source from the Macaulay 2 website
-  # that are required for the build.
-  #
-  # Note that several of these packages are only available at
-  # macaulay2.com, or the format of the downloads is slightly
-  # different there from the official release.
-  #
-  # TODO: build and install these as separate packages, to make the
-  # build more modular.
-  #
-  # TODO: build documentation separately, since it takes a long time
-  # (maybe half of the total build time?) and isn't necessary.
-
-  m2download = args: pkgs.fetchurl {
-    url = "http://macaulay2.com/Downloads/OtherSourceCode/${builtins.elemAt args 0}";
-    hash = builtins.elemAt args 1;
-  };
-
-  downloads = map m2download [
-    # unavailable?
-    ["factory-4.2.1.tar.gz" "sha256-OjE12Nnom8pRKyLIhY8+A/RLFWKd9vAwnOT33e3QmhU="]
-    ["factory.4.0.1-gftables.tar.gz" "sha256-nNFYzrHCscR73KLAsAS7qSyw4Kqg6mpDynhOvc4Q7r0="]
-  ];
+  my-singular-factory = import ./singular-factory.nix { inherit pkgs; };
 
 in
   pkgs.stdenv.mkDerivation rec {
@@ -88,18 +65,14 @@ in
       fflas-ffpack
       blas
 
-      # non-pkgs packages, defined above
+      # Packages not available in nixpkgs, defined above
       my-cohomCalg
       my-normaliz
       my-frobby
       my-lrslib
       my-TOPCOM
+      my-singular-factory
     ];
-
-    link_downloads =
-      map
-        (file: "ln -s ${file.outPath} src/M2/BUILD/tarfiles/${file.name};")
-        downloads;
 
     # M2 expects to find a link to some programs here or on the path:
     link_programs = ''
