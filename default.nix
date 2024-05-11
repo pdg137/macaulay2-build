@@ -101,6 +101,12 @@ in
         (file: "ln -s ${file.outPath} src/M2/BUILD/tarfiles/${file.name};")
         downloads;
 
+    # M2 expects to find a link to some programs here or on the path:
+    link_programs = ''
+      mkdir -p $out/libexec/Macaulay2/bin/ &&
+      ln -s ${my-normaliz}/bin/normaliz $out/libexec/Macaulay2/bin/
+    '';
+
     configureArgs = [
       # Autoconf does not seem to be able to identify the Boost version
       # without these explicit arguments.
